@@ -1,0 +1,40 @@
+body {
+    background-image: linear-gradient(to bottom right, rgb(231, 51, 81), pink, rgb(255, 205, 144), rgb(247, 247, 105));
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: none;
+    padding: none;
+    overflow: hidden;
+}
+
+#score {
+    position: float;
+}
+
+.tile,
+.square {
+    width: 90px;
+}
+
+.icon_0 {
+    filter: invert(28%) sepia(99%) saturate(7485%) hue-rotate(200deg)
+}
+
+.icon_1 {
+    color: black;
+}
+
+.icon_2 {
+    filter: invert(28%) sepia(99%) saturate(7485%)
+}
+
+.icon_3 {
+    filter: invert(28%) sepia(99%) saturate(7485%) hue-rotate(130deg)
+}
+
+.icon_4 {
+    filter: invert(28%) sepia(99%) saturate(7485%) hue-rotate(300deg)
+}
