@@ -1,5 +1,5 @@
 const GAME_BOARD = document.getElementById('gameBoard');
-const BOARD_SIZE = 8;
+const BOARD_SIZE = 5;
 const EMPTY_TILE = -1;
 const TILES_ICONS = [
     './game-tiles/discord.svg',
@@ -10,8 +10,6 @@ const TILES_ICONS = [
 ];
 let position1 = [-1, -1];
 let position2 = [-1, -1];
-const SCORE = document.getElementById('score');
-let curentSCORE = 0;
 
 const BOARD_TILES = new Array(BOARD_SIZE);
 for (let i = 0; i < BOARD_SIZE; i++) {
@@ -20,9 +18,12 @@ for (let i = 0; i < BOARD_SIZE; i++) {
         BOARD_TILES[i][ii] = Math.floor(Math.random() * TILES_ICONS.length);
     }
 }
+const SCORE = document.getElementById('score');
+let curentSCORE = 0;
+let loadingInitialMatches = true;
 renderTiles(BOARD_TILES);
 checkMatch(BOARD_TILES);
-
+loadingInitialMatches = false;
 function renderTiles(arr) {
     GAME_BOARD.innerHTML = '';
     arr.forEach((el, rowIndex) => {
@@ -128,6 +129,10 @@ function rezolveMatch(row, col, arr, arg) {
     if (sequenceTiles.length >= 3) {
         for (const coords of sequenceTiles) {
             arr[coords.r][coords.c] = EMPTY_TILE;
+        }
+        if (!loadingInitialMatches) {
+            curentSCORE += 10 * sequenceTiles.length;
+            SCORE.innerHTML = "The Score is " + curentSCORE;
         }
     }
     handleTileChange(arr);
