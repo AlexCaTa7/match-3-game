@@ -11,12 +11,18 @@ body {
 }
 
 #score {
-    position: float;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    min-width: 200px;
+    font-size: 2rem;
+    background-color: gold;
+    color: antiquewhite;
+    padding: 6px;
+    border-radius: 7px;
+    font-weight: bolder;
 }
 
-.square_active {
-    filter: drop-shadow(1px 1px black);
-}
 
 .tile,
 .square {
@@ -41,4 +47,48 @@ body {
 
 .icon_4 {
     filter: invert(28%) sepia(99%) saturate(7485%) hue-rotate(300deg)
+}
+
+.square_0.square_active {
+    background-image: radial-gradient(rgb(182, 207, 241), rgb(167, 211, 238), white);
+}
+
+.square_1.square_active {
+    background-image: radial-gradient(#4444440f, #2222226d, lab(100% 0.01 -0.01));
+}
+
+.square_2.square_active {
+    background-image: radial-gradient(#ffd1d1, #f8a6a6, white);
+}
+
+.square_3.square_active {
+    background-image: radial-gradient(#b0f5ba, #d3fcd6, white);
+}
+
+.square_4.square_active {
+    background-image: radial-gradient(#f4d1ff, #f0b0ff, white);
+}
+
+#gameBoard {
+    position: relative;
+}
+
+#gameBoard::after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 110%;
+    height: 110%;
+    transform: translateX(-5%) translateY(-5%);
+    filter: blur(30px);
+    background-color: white;
+    opacity: .4;
+    z-index: -1;
+}
+
+.square {
+    padding: 10px;
+    border: 2px solid white;
+    border-radius: 20px;
 }
