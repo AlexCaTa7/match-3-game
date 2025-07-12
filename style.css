@@ -14,6 +14,10 @@ body {
     position: float;
 }
 
+.square_active {
+    filter: drop-shadow(1px 1px black);
+}
+
 .tile,
 .square {
     width: 90px;
