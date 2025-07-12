@@ -77,24 +77,31 @@ function AddEventListenersForTiles() {
 }
 
 function checkMatch(arr) {
+    let matchFound = false;
+
     for (let i = 0; i < BOARD_SIZE; i++) {
         for (let ii = 0; ii < BOARD_SIZE - 2; ii++) {
             if (arr[i][ii] !== EMPTY_TILE &&
                 arr[i][ii] === arr[i][ii + 1] &&
                 arr[i][ii + 1] === arr[i][ii + 2]) {
                 rezolveMatch(i, ii, arr, 1);
+                matchFound = true;
             }
         }
     }
+
     for (let i = 0; i < BOARD_SIZE - 2; i++) {
         for (let ii = 0; ii < BOARD_SIZE; ii++) {
             if (arr[i][ii] !== EMPTY_TILE &&
                 arr[i][ii] === arr[i + 1][ii] &&
                 arr[i + 1][ii] === arr[i + 2][ii]) {
                 rezolveMatch(i, ii, arr, 2);
+                matchFound = true;
             }
         }
     }
+
+    return matchFound;
 }
 
 function rezolveMatch(row, col, arr, arg) {
@@ -167,11 +174,21 @@ function swap(x1, y1, x2, y2, arr) {
         const temp = arr[x1][y1];
         arr[x1][y1] = arr[x2][y2];
         arr[x2][y2] = temp;
+
         renderTiles(arr);
-        checkMatch(arr);
+        let matched = checkMatch(arr);
+
+        if (!matched) {
+            const tempBack = arr[x1][y1];
+            arr[x1][y1] = arr[x2][y2];
+            arr[x2][y2] = tempBack;
+
+            renderTiles(arr);
+        }
+
         return true;
     } else {
-        window.alert("Not a valid move, lil bro! Try swapping only adjacent tiles horizontally or vertically.");
+        window.alert("Not a valid move lil bro ");
         return false;
     }
 }
