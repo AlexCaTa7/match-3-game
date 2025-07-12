@@ -63,6 +63,10 @@ body {
     background-image: radial-gradient(#f4d1ff, #f0b0ff, white);
 }
 
+.square_active {
+    transform: scale(1.1, 1.1);
+}
+
 #gameBoard {
     position: relative;
 }
@@ -126,4 +130,25 @@ body {
     padding: 10px;
     border: 2px solid white;
     border-radius: 20px;
+}
+
+.tile {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    position: relative;
+    display: block;
+}
+
+.tile.fade-out {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.square {
+    position: relative;
+}
+
+.square.moving {
+    z-index: 10;
+    transition: transform 0.3s ease;
+    position: relative;
 }

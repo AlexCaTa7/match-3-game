@@ -1,5 +1,5 @@
 const GAME_BOARD = document.getElementById('gameBoard');
-const BOARD_SIZE = 5;
+const BOARD_SIZE = 6;
 const EMPTY_TILE = -1;
 const TILES_ICONS = [
     './game-tiles/discord.svg',
@@ -7,6 +7,13 @@ const TILES_ICONS = [
     './game-tiles/youtube.svg',
     './game-tiles/whatsapp.svg',
     './game-tiles/instagram.svg'
+];
+const TILES_SOUNDS = [
+    './sounds/discord.mp3',
+    './sounds/github.mp3',
+    './sounds/youtube.mp3',
+    './sounds/whatsapp.mp3',
+    './sounds/instagram.mp3'
 ];
 let position1 = [-1, -1];
 let position2 = [-1, -1];
@@ -24,6 +31,7 @@ let loadingInitialMatches = true;
 renderTiles(BOARD_TILES);
 checkMatch(BOARD_TILES);
 loadingInitialMatches = false;
+
 function renderTiles(arr) {
     GAME_BOARD.innerHTML = '';
     arr.forEach((el, rowIndex) => {
@@ -33,7 +41,6 @@ function renderTiles(arr) {
             square.classList.add('square');
             square.dataset.row = rowIndex;
             square.dataset.col = colIndex;
-
             if (root !== EMPTY_TILE) {
                 const tile = document.createElement('img');
                 tile.src = TILES_ICONS[root];
@@ -53,10 +60,10 @@ function renderTiles(arr) {
 
 function AddEventListenersForTiles() {
     document.querySelectorAll('.square').forEach((el) => {
+        el.onclick = null;
         el.addEventListener('click', (event) => {
             const clickedRow = parseInt(el.dataset.row);
             const clickedCol = parseInt(el.dataset.col);
-
             if (position1[0] === -1) {
                 position1[0] = clickedRow;
                 position1[1] = clickedCol;
@@ -64,13 +71,11 @@ function AddEventListenersForTiles() {
             } else {
                 position2[0] = clickedRow;
                 position2[1] = clickedCol;
-
-                swap(position1[0], position1[1], position2[0], position2[1], BOARD_TILES);
-                el.classList.remove('square_active');
-                position1[0] = -1;
-                position1[1] = -1;
-                position2[0] = -1;
-                position2[1] = -1;
+                const firstEl = document.querySelector(`.square[data-row="${position1[0]}"][data-col="${position1[1]}"]`);
+                swap(position1[0], position1[1], position2[0], position2[1], BOARD_TILES, firstEl);
+                firstEl.classList.remove('square_active');
+                position1 = [-1, -1];
+                position2 = [-1, -1];
             }
         });
     });
@@ -78,7 +83,6 @@ function AddEventListenersForTiles() {
 
 function checkMatch(arr) {
     let matchFound = false;
-
     for (let i = 0; i < BOARD_SIZE; i++) {
         for (let ii = 0; ii < BOARD_SIZE - 2; ii++) {
             if (arr[i][ii] !== EMPTY_TILE &&
@@ -89,7 +93,6 @@ function checkMatch(arr) {
             }
         }
     }
-
     for (let i = 0; i < BOARD_SIZE - 2; i++) {
         for (let ii = 0; ii < BOARD_SIZE; ii++) {
             if (arr[i][ii] !== EMPTY_TILE &&
@@ -100,49 +103,48 @@ function checkMatch(arr) {
             }
         }
     }
-
     return matchFound;
 }
 
-function rezolveMatch(row, col, arr, arg) {
+async function rezolveMatch(row, col, arr, arg) {
     const matchedTile = arr[row][col];
-    if (matchedTile === EMPTY_TILE) {
-        return;
-    }
-    let sequenceTiles = [];
-    sequenceTiles.push({ r: row, c: col });
+    if (matchedTile === EMPTY_TILE) return;
 
+    let sequenceTiles = [{ r: row, c: col }];
     if (arg === 1) {
         for (let c = col + 1; c < BOARD_SIZE; c++) {
-            if ((arr[row][c] === matchedTile)) {
-                sequenceTiles.push({ r: row, c: c });
-            } else {
-                break;
-            }
+            if (arr[row][c] === matchedTile) sequenceTiles.push({ r: row, c });
+            else break;
         }
     } else if (arg === 2) {
         for (let r = row + 1; r < BOARD_SIZE; r++) {
-            if (matchedTile === arr[r][col]) {
-                sequenceTiles.push({ r: r, c: col });
-            } else {
-                break;
-            }
+            if (arr[r][col] === matchedTile) sequenceTiles.push({ r, c: col });
+            else break;
         }
     } else {
-        console.error('Unexpected error in rezolveMatch: Invalid arg type.');
         return;
     }
-
     if (sequenceTiles.length >= 3) {
+        // Animate fade-out
+        for (const { r, c } of sequenceTiles) {
+            const tileElement = document.querySelector(`.square[data-row="${r}"][data-col="${c}"] img`);
+            if (tileElement) tileElement.classList.add('fade-out');
+        }
+        // Wait for animation to finish (300ms)
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Remove tiles from array
         for (const coords of sequenceTiles) {
             arr[coords.r][coords.c] = EMPTY_TILE;
         }
+
         if (!loadingInitialMatches) {
             curentSCORE += 10 * sequenceTiles.length;
             SCORE.innerHTML = "The Score is " + curentSCORE;
+            playSound(matchedTile);
         }
+        handleTileChange(arr);
     }
-    handleTileChange(arr);
 }
 
 function handleTileChange(board) {
@@ -169,8 +171,12 @@ function handleTileChange(board) {
     }
 }
 
-function swap(x1, y1, x2, y2, arr) {
-    if ((x2 - x1) * (x2 - x1) <= 1 && (y2 - y1) * (y2 - y1) <= 1 && (x1 === x2 || y1 === y2)) {
+async function swap(x1, y1, x2, y2, arr, el2) {
+    if ((x2 - x1) ** 2 + (y2 - y1) ** 2 === 1) {
+        const el1 = document.querySelector(`.square[data-row="${x1}"][data-col="${y1}"] img`);
+        const el2img = document.querySelector(`.square[data-row="${x2}"][data-col="${y2}"] img`);
+        await animateSwap(el1, el2img);
+
         const temp = arr[x1][y1];
         arr[x1][y1] = arr[x2][y2];
         arr[x2][y2] = temp;
@@ -179,16 +185,55 @@ function swap(x1, y1, x2, y2, arr) {
         let matched = checkMatch(arr);
 
         if (!matched) {
+            await animateSwap(
+                document.querySelector(`.square[data-row="${x1}"][data-col="${y1}"] img`),
+                document.querySelector(`.square[data-row="${x2}"][data-col="${y2}"] img`)
+            );
             const tempBack = arr[x1][y1];
             arr[x1][y1] = arr[x2][y2];
             arr[x2][y2] = tempBack;
-
             renderTiles(arr);
         }
-
         return true;
     } else {
         window.alert("Not a valid move lil bro ");
         return false;
     }
+}
+
+const sounds = [
+    new Audio('./sounds/discord.mp3'),
+    new Audio('./sounds/github.mp3'),
+    new Audio('./sounds/youtube.mp3'),
+    new Audio('./sounds/whatsapp.mp3'),
+    new Audio('./sounds/instagram.mp3')
+];
+
+
+function playSound(tileIndex) {
+    if (tileIndex >= 0 && tileIndex < sounds.length) {
+        sounds[tileIndex].play();
+    }
+}
+function animateSwap(el1, el2) {
+    const rect1 = el1.getBoundingClientRect();
+    const rect2 = el2.getBoundingClientRect();
+    const deltaX = rect2.left - rect1.left;
+    const deltaY = rect2.top - rect1.top;
+
+    el1.style.transition = 'transform 0.3s ease';
+    el2.style.transition = 'transform 0.3s ease';
+
+    el1.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    el2.style.transform = `translate(${-deltaX}px, ${-deltaY}px)`;
+
+    return new Promise(resolve => {
+        let count = 0;
+        function done() {
+            count++;
+            if (count === 2) resolve();
+        }
+        el1.addEventListener('transitionend', done, { once: true });
+        el2.addEventListener('transitionend', done, { once: true });
+    });
 }
