@@ -23,12 +23,6 @@ body {
     font-weight: bolder;
 }
 
-
-.tile,
-.square {
-    width: 90px;
-}
-
 .icon_0 {
     filter: invert(28%) sepia(99%) saturate(7485%) hue-rotate(200deg)
 }
@@ -71,6 +65,47 @@ body {
 
 #gameBoard {
     position: relative;
+}
+
+.tile,
+.square {
+    width: 90px;
+}
+
+@media only screen and (max-width:728px) {
+
+    .tile,
+    .square {
+        width: 40px;
+    }
+
+    ;
+
+    #score {
+        width: 10%;
+        top: 10%;
+        left: 25%;
+        right: 25%;
+        font-size: 1.8rem;
+    }
+
+}
+
+@media only screen and (max-width:1400px) and (orientation: landscape) {
+
+    .tile,
+    .square {
+        width: 40px;
+    }
+
+    #score {
+        width: 10%;
+        top: 10%;
+        left: 25%;
+        right: 25%;
+        font-size: 1.8rem;
+    }
+
 }
 
 #gameBoard::after {
