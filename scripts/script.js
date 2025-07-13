@@ -1,3 +1,4 @@
+import { playSound } from "./sounds.js";
 const GAME_BOARD = document.getElementById('gameBoard');
 const BOARD_SIZE = 6;
 const EMPTY_TILE = -1;
@@ -7,13 +8,6 @@ const TILES_ICONS = [
     './game-tiles/youtube.svg',
     './game-tiles/whatsapp.svg',
     './game-tiles/instagram.svg'
-];
-const TILES_SOUNDS = [
-    './sounds/discord.mp3',
-    './sounds/github.mp3',
-    './sounds/youtube.mp3',
-    './sounds/whatsapp.mp3',
-    './sounds/instagram.mp3'
 ];
 let position1 = [-1, -1];
 let position2 = [-1, -1];
@@ -201,20 +195,9 @@ async function swap(x1, y1, x2, y2, arr, el2) {
     }
 }
 
-const sounds = [
-    new Audio('./sounds/discord.mp3'),
-    new Audio('./sounds/github.mp3'),
-    new Audio('./sounds/youtube.mp3'),
-    new Audio('./sounds/whatsapp.mp3'),
-    new Audio('./sounds/instagram.mp3')
-];
 
 
-function playSound(tileIndex) {
-    if (tileIndex >= 0 && tileIndex < sounds.length) {
-        sounds[tileIndex].play();
-    }
-}
+
 function animateSwap(el1, el2) {
     const rect1 = el1.getBoundingClientRect();
     const rect2 = el2.getBoundingClientRect();
