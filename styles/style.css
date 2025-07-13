@@ -1,13 +1,14 @@
 body {
     background-image: linear-gradient(to bottom right, rgb(231, 51, 81), pink, rgb(255, 205, 144), rgb(247, 247, 105));
+    background-repeat: no-repeat;
     width: 100%;
     height: 100vh;
+    max-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: none;
-    padding: none;
-    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 #score {
