@@ -75,6 +75,7 @@ body {
 .tile,
 .square {
     width: 90px;
+
 }
 
 @media only screen and (max-width:728px) {

@@ -20,7 +20,7 @@ for (let i = 0; i < BOARD_SIZE; i++) {
     }
 }
 const SCORE = document.getElementById('score');
-let curentSCORE = 0;
+let currentSCORE = 0;
 let loadingInitialMatches = true;
 renderTiles(BOARD_TILES);
 checkMatch(BOARD_TILES);
@@ -51,10 +51,18 @@ function renderTiles(arr) {
     });
     AddEventListenersForTiles();
 }
-
 function AddEventListenersForTiles() {
     document.querySelectorAll('.square').forEach((el) => {
         el.onclick = null;
+        el.addEventListener('dragstart', TiledragStart);
+        el.addEventListener('dragover', e => { e.preventDefault(); })
+        function TiledragStart(event) {
+            event.dataTransfer.setData('text/plain', `${el.dataset.row},${el.dataset.col}`);
+        }
+        el.addEventListener('drop', event => {
+            const [initRow, initCol] = event.dataTransfer.getData('text/plain').split(',').map(Number);
+            swap(parseInt(el.dataset.row), parseInt(el.dataset.col), initRow, initCol, BOARD_TILES, el)
+        })
         el.addEventListener('click', (event) => {
             const clickedRow = parseInt(el.dataset.row);
             const clickedCol = parseInt(el.dataset.col);
@@ -62,6 +70,7 @@ function AddEventListenersForTiles() {
                 position1[0] = clickedRow;
                 position1[1] = clickedCol;
                 el.classList.add('square_active');
+                el.setAttribute('draggable', 'true')
             } else {
                 position2[0] = clickedRow;
                 position2[1] = clickedCol;
@@ -75,14 +84,14 @@ function AddEventListenersForTiles() {
     });
 }
 
-function checkMatch(arr) {
+async function checkMatch(arr) {
     let matchFound = false;
     for (let i = 0; i < BOARD_SIZE; i++) {
         for (let ii = 0; ii < BOARD_SIZE - 2; ii++) {
             if (arr[i][ii] !== EMPTY_TILE &&
                 arr[i][ii] === arr[i][ii + 1] &&
                 arr[i][ii + 1] === arr[i][ii + 2]) {
-                rezolveMatch(i, ii, arr, 1);
+                await rezolveMatch(i, ii, arr, 1);
                 matchFound = true;
             }
         }
@@ -92,7 +101,7 @@ function checkMatch(arr) {
             if (arr[i][ii] !== EMPTY_TILE &&
                 arr[i][ii] === arr[i + 1][ii] &&
                 arr[i + 1][ii] === arr[i + 2][ii]) {
-                rezolveMatch(i, ii, arr, 2);
+                await rezolveMatch(i, ii, arr, 2);
                 matchFound = true;
             }
         }
@@ -133,15 +142,15 @@ async function rezolveMatch(row, col, arr, arg) {
         }
 
         if (!loadingInitialMatches) {
-            curentSCORE += 10 * sequenceTiles.length;
-            SCORE.innerHTML = "The Score is " + curentSCORE;
+            currentSCORE += 10 * sequenceTiles.length;
+            SCORE.innerHTML = "The Score is " + currentSCORE;
             playSound(matchedTile);
         }
         handleTileChange(arr);
     }
 }
 
-function handleTileChange(board) {
+async function handleTileChange(board) {
     let repeat = false;
     for (let col = 0; col < BOARD_SIZE; col++) {
         let emptyCount = 0;
@@ -161,7 +170,7 @@ function handleTileChange(board) {
     }
     renderTiles(board);
     if (repeat) {
-        checkMatch(board);
+        await checkMatch(board);
     }
 }
 
@@ -176,7 +185,7 @@ async function swap(x1, y1, x2, y2, arr, el2) {
         arr[x2][y2] = temp;
 
         renderTiles(arr);
-        let matched = checkMatch(arr);
+        let matched = await checkMatch(arr);
 
         if (!matched) {
             await animateSwap(
@@ -190,7 +199,6 @@ async function swap(x1, y1, x2, y2, arr, el2) {
         }
         return true;
     } else {
-        window.alert("Not a valid move lil bro ");
         return false;
     }
 }
