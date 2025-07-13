@@ -1,3 +1,4 @@
+import { initialiseSound } from "./buttons.js";
 const sounds = [
     new Audio('./sounds/discord.mp3'),
     new Audio('./sounds/github.mp3'),
@@ -5,14 +6,14 @@ const sounds = [
     new Audio('./sounds/whatsapp.mp3'),
     new Audio('./sounds/instagram.mp3')
 ];
-for (const sound of sounds) {
+for (let sound of sounds) {
     sound.load();
-    sound.volume = 1.0;
-    sound.muted = false;
 }
 export function playSound(tileIndex) {
     if (tileIndex >= 0 && tileIndex < sounds.length) {
-        const clone = sounds[tileIndex].cloneNode(); // create a fresh instance
-        clone.play().catch(err => console.error("Sound error:", err));
+        const clone = initialiseSound(sounds[tileIndex].cloneNode());
+        clone.play().catch((e) => {
+            console.warn('Sound play failed:', e)
+        });
     }
 }

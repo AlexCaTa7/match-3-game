@@ -1,6 +1,6 @@
 import { playSound } from "./sounds.js";
 const GAME_BOARD = document.getElementById('gameBoard');
-const BOARD_SIZE = 6;
+const BOARD_SIZE = 5;
 const EMPTY_TILE = -1;
 const TILES_ICONS = [
     './game-tiles/discord.svg',
