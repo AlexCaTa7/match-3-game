@@ -63,6 +63,7 @@ body {
 
 .square_active {
     transform: scale(1.1, 1.1);
+    flex: 2;
 }
 
 #gameBoard {
@@ -125,6 +126,14 @@ body {
     z-index: -1;
 }
 
+#gameBoard tr {
+    display: flex;
+}
+
+#gameBoard td {
+    flex: 1;
+}
+
 .square {
     padding: 10px;
     border: 2px solid white;
@@ -150,12 +159,4 @@ body {
     z-index: 10;
     transition: transform 0.3s ease;
     position: relative;
-}
-
-.--opacity0 {
-    opacity: 0;
-}
-
-.--opacity1 {
-    opacity: 1;
 }

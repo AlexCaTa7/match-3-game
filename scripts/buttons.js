@@ -58,6 +58,8 @@ ChangeUIButton.appendChild(SunIcon());
 let LightOn = true;
 ChangeUIButton.style.width = 50 + 'px';
 ChangeUIButton.style.height = 50 + 'px';
+ChangeUIButton.style.padding = 0;
+ChangeUIButton.style.borderRadius = 50 + '%';
 ChangeUIButton.addEventListener('click', ev => {
     ChangeUIButton.innerHTML = '';
     if (LightOn) {

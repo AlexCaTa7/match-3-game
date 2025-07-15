@@ -57,6 +57,28 @@ function renderTiles(arr) {
 function AddEventListenersForTiles() {
     document.querySelectorAll('.square').forEach((el) => {
         el.onclick = null;
+        let dragStartPos = null;
+
+        el.addEventListener('touchstart', (event) => {
+            const row = el.dataset.row;
+            const col = el.dataset.col;
+            dragStartPos = { row: Number(row), col: Number(col) };
+        });
+
+        el.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+        });
+
+        el.addEventListener('touchend', (event) => {
+            if (!dragStartPos) return;
+
+            const targetRow = Number(el.dataset.row);
+            const targetCol = Number(el.dataset.col);
+
+            swap(targetRow, targetCol, dragStartPos.row, dragStartPos.col, BOARD_TILES, el);
+
+            dragStartPos = null;
+        });
         el.addEventListener('dragstart', TiledragStart);
         el.addEventListener('dragover', e => { e.preventDefault(); })
         function TiledragStart(event) {
