@@ -1,4 +1,5 @@
 import { playSound } from "./sounds.js";
+
 const GAME_BOARD = document.getElementById('gameBoard');
 const BOARD_SIZE = 5;
 const EMPTY_TILE = -1;
@@ -18,6 +19,19 @@ for (let i = 0; i < BOARD_SIZE; i++) {
     for (let ii = 0; ii < BOARD_SIZE; ii++) {
         BOARD_TILES[i][ii] = Math.floor(Math.random() * TILES_ICONS.length);
     }
+}
+
+
+
+export function refresh() {
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        BOARD_TILES[i] = new Array(BOARD_SIZE);
+        for (let ii = 0; ii < BOARD_SIZE; ii++) {
+            BOARD_TILES[i][ii] = Math.floor(Math.random() * TILES_ICONS.length);
+        }
+    }
+    checkMatch(BOARD_TILES);
+    renderTiles(BOARD_TILES);
 }
 const SCORE = document.getElementById('score');
 let currentSCORE = 0;
@@ -253,3 +267,4 @@ function animateSwap(el1, el2) {
         el2.addEventListener('transitionend', done, { once: true });
     });
 }
+SCORE.innerHTML = "Your Score is 0";

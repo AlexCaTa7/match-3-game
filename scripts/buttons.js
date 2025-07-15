@@ -1,5 +1,5 @@
-import { SunIcon, MoonIcon } from "./iconsSvg.js";
-
+import { SunIcon, MoonIcon, RestartButton } from "./iconsSvg.js";
+import { refresh } from "./script.js";
 export function initialiseSound(sound) {
     sound.volume = sound_volume
     sound.muted = !isSoundActive();
@@ -38,22 +38,25 @@ function isSoundActive() {
 }
 let head = document.getElementsByTagName('head')[0];
 let link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.rel = 'styles/light_mode.css';
+head.appendChild(link)
 function ChangeUI(arg) {
     if (head.contains(link)) {
         head.removeChild(link);
-    } else {
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        if (arg === 0) {
-            link.href = '../styles/light_mode.css';
-        }
-        if (arg === 1) {
-            link.href = '../styles/dark_mode.css';
-        }
-        head.appendChild(link);
-    } return true;
+    }
+
+    link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = arg === 0 ? 'styles/light_mode.css' : 'styles/dark_mode.css';
+    head.appendChild(link);
+
+    return true;
 }
 let ChangeUIButton = document.createElement('button');
+ChangeUIButton.id = 'ChangeUIButton';
 ChangeUIButton.appendChild(SunIcon());
 let LightOn = true;
 ChangeUIButton.style.width = 50 + 'px';
@@ -73,3 +76,8 @@ ChangeUIButton.addEventListener('click', ev => {
     }
 })
 PhoneNav.appendChild(ChangeUIButton);
+const restart = RestartButton();
+restart.addEventListener('click', (ev) => {
+    refresh();
+})
+PhoneNav.appendChild(restart);

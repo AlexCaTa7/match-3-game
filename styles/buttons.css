@@ -13,19 +13,23 @@
     background-color: gold;
 }
 
-
 .sound_icon {
+    top: 1vh;
     width: 50px;
+}
+
+#ChangeUIButton {
+    margin-top: 1vh;
 }
 
 #phoneNavigation {
     display: flex;
     flex-direction: row-reverse;
     position: fixed;
-    justify-content: space-between;
+    justify-content: space-around;
     bottom: 0;
     width: 100vw;
-    height: 7vh;
+    height: 8vh;
     left: 0;
     background-color: rgba(245, 196, 72, 0.641);
 }
@@ -33,3 +37,7 @@
 .sound_on_icon {}
 
 .sound_off_icon {}
+
+#ChangeUIButton {
+    border: none;
+}
