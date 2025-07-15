@@ -24,25 +24,22 @@ body {
     font-weight: bolder;
 }
 
-.icon_0 {
-    filter: invert(28%) sepia(99%) saturate(7485%) hue-rotate(200deg)
+.tile:active,
+.tile:hover {
+    filter: drop-shadow(0px 0px 10px white);
 }
 
-.icon_1 {
-    color: black;
-}
 
-.icon_2 {
-    filter: invert(28%) sepia(99%) saturate(7485%)
-}
 
-.icon_3 {
-    filter: invert(28%) sepia(99%) saturate(7485%) hue-rotate(130deg)
-}
+.icon_0 {}
 
-.icon_4 {
-    filter: invert(28%) sepia(99%) saturate(7485%) hue-rotate(300deg)
-}
+.icon_1 {}
+
+.icon_2 {}
+
+.icon_3 {}
+
+.icon_4 {}
 
 .square_0.square_active {
     background-image: radial-gradient(rgb(182, 207, 241), rgb(167, 211, 238), white);
@@ -153,4 +150,12 @@ body {
     z-index: 10;
     transition: transform 0.3s ease;
     position: relative;
+}
+
+.--opacity0 {
+    opacity: 0;
+}
+
+.--opacity1 {
+    opacity: 1;
 }

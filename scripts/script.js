@@ -21,10 +21,13 @@ for (let i = 0; i < BOARD_SIZE; i++) {
 }
 const SCORE = document.getElementById('score');
 let currentSCORE = 0;
+SCORE.innerHTML = "Your Score is 0";
 let loadingInitialMatches = true;
-renderTiles(BOARD_TILES);
-checkMatch(BOARD_TILES);
-loadingInitialMatches = false;
+(async () => {
+    await checkMatch(BOARD_TILES);
+    renderTiles(BOARD_TILES);
+    loadingInitialMatches = false;
+})();
 
 function renderTiles(arr) {
     GAME_BOARD.innerHTML = '';
@@ -143,7 +146,7 @@ async function rezolveMatch(row, col, arr, arg) {
 
         if (!loadingInitialMatches) {
             currentSCORE += 10 * sequenceTiles.length;
-            SCORE.innerHTML = "The Score is " + currentSCORE;
+            SCORE.innerHTML = "Your Score is " + currentSCORE;
             playSound(matchedTile);
         }
         handleTileChange(arr);

@@ -6,6 +6,7 @@
     <title>MATCH 3</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/light_mode.css"
 </head>
 <body>
     <div id="score"></div>
@@ -19,6 +20,6 @@
     </div>
 <script src="./scripts/script.js" type="module"></script>
 <script src="./scripts/buttons.js" type="module"></script>
-<script src="./scripts/iconsSvg.js" type="module"></script>
+<script src="./scripts/sounds.js" type="module"></script>
 </body>
 </html>
